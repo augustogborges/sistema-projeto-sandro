@@ -18,14 +18,14 @@ int main()
 
     while (senhaCorreta == 0) {
       if (tentativas > 3) {
-        printf("Máximo de tentativas alcançadas!\n");
+        printf("ACESSO BLOQUEADO! Maximo de tentativas atingido.\n\n");
         exit(0);
       }
       printf("Digite a senha de acesso dado pelo administrador do sistemas: ");
       scanf("%s", senha);
 
       if (strcmp(senha, secret) != 0) {
-        printf("Senha incorreta! \nTentantiva número %i\n", tentativas);
+        printf("Senha incorreta, tente novamente\n\n");
         tentativas++;
       }
       if (strcmp(senha, secret) == 0) {
@@ -81,65 +81,116 @@ int main()
     printf("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n");
 
     while (opcao != 4) {
-        printf("\nBem-vindo ao Menu Inicial\n");
-        printf("1 - Cadastro\n");
-        printf("2 - Movimentacoes\n");
-        printf("3 - Relatorio\n");
-        printf("4 - Sair\n");
-        printf("Digite o numero da opcao desejada: ");
-        scanf("%d", &opcao);
+      printf("\nBem-vindo ao Menu Inicial\n");
+      printf("1 - Cadastro\n");
+      printf("2 - Movimentacoes\n");
+      printf("3 - Relatorio\n");
+      printf("4 - Sair\n");
+      printf("Digite o numero da opcao desejada: ");
+      scanf("%i", &opcao);
 
-        switch (opcao) {
-        case 1:
-
+      switch (opcao) {
+      case 1:
+        system("clear");
         if (total >= max) {
-            printf("Valor maximo de produtos atingidos");
-            break;
+          printf("Valor maximo de produtos atingidos");
+          break;
         }
 
         char continuar = 's';
 
         while (continuar == 's' || continuar == 'S') {
-            getchar();
+          getchar();
 
-            printf("\nDigite o nome do produto: ");
-            scanf("%[^\n]s", nomes[total]);
+          printf("\nDigite o nome do produto: ");
+          scanf("%[^\n]s", nomes[total]);
 
-            printf("\nDigite a quantidade do produto: ");
-            scanf("%i", &quantidades[total]);
+          printf("\nDigite a quantidade do produto: ");
+          scanf("%i", &quantidades[total]);
 
-            printf("\nDigite o valor do produto: R$");
-            scanf("%f", &precos[total]);
+          printf("\nDigite o valor do produto: R$");
+          scanf("%f", &precos[total]);
 
-            total += 1;
+          total++;
 
-            printf("\nDeseja cadastrar mais um produto? (s/n): ");
-            scanf(" %c", &continuar);
+          printf("\nDeseja cadastrar mais um produto? (s/n): ");
+          scanf(" %c", &continuar);
+          system("clear");
         }
 
         break;
 
-        case 2:
-        printf("Opcao Movimentacoes selecionada.\n");
+      case 2:
+        system("clear");
+        int sub_opcao = 0;
+        int produto;
+        int quantidade;
+
+        if (total == 0) {
+          printf("Nenhum item cadastrado");
+          break;
+        }
+
+        printf("\nMOVIMENTACOES DE ESTOQUE\n");
+        printf("1 - Saida de mercadoria (venda)\n");
+        printf("2 - Entrada de mercadoria (recebimento)\n");
+        printf("Digite a opcao desejada: ");
+        scanf("%i", &sub_opcao);
+
+        if (sub_opcao != 1 && sub_opcao != 2) {
+          printf("Opcao invalida!");
+        }
+
+        printf("Produtos cadastrados\n");
+
+        for (int i = 0; i < total; i++) {
+          printf("%i - Produto: %s || Quantidade em estoque: %i\n", i, nomes[i], quantidades[i]);
+        }
+
+        printf("Digite o número do produto: ");
+        scanf("%i", &produto);
+
+        if (produto < 0 || produto > total) {
+          printf("Produto Inválido!\n");
+          break;
+        }
+
+        if (sub_opcao == 1) {
+          printf("Digite a quantidade que deseja dar saída no estoque: ");
+          scanf("%i", &quantidade);
+
+          if (quantidade > quantidades[produto]) {
+            printf("Estoque insuficiente!\n");
+          }
+          quantidades[produto] -= quantidade;
+        }
+
+        if (sub_opcao == 2) {
+          printf("Digite a quantidade dar entrada no estoque: ");
+          scanf("%i", &quantidade);
+
+          quantidades[produto] += quantidade;
+        }
+
         break;
-        case 3:
+      case 3:
         printf("Opção Relatorio selecionada.\n");
 
         if (total == 0) {
-            printf("Nenhum item cadastrado");
-            break;
+          printf("Nenhum item cadastrado");
+          break;
         }
 
         for (int i = 0; i < total; i++) {
-            printf("\nNome: %s\nQuantidade: %i\nPreços: R$%.2f\n\n", nomes[i], quantidades[i], precos[i]);
+          printf("\nNome: %s\nQuantidade: %i\nPreços: R$%.2f\n\n", nomes[i],quantidades[i], precos[i]);
         }
 
         break;
-        case 4:
+      case 4:
         printf("Encerrando o programa...\n");
         break;
-        default:
+      default:
         printf("Opcao invalida!\n");
-        }
+      }
     }
 }
